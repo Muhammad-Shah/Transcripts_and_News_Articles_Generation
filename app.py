@@ -41,7 +41,7 @@ def audio_to_transcript(audio_file):
     return transcript
 
 def transcript_article(text):
-    
+
     from langchain_core.prompts import ChatPromptTemplate
     chat = ChatGroq(temperature=0.5,
                     model_name="Llama3-70b-8192",
@@ -58,7 +58,7 @@ def transcript_article(text):
     prompt = ChatPromptTemplate.from_messages(messages=[('system', system), ('human', human)])
     chain = prompt | chat
     response = chain.invoke({"query": f'{text}'})
-    return response
+    return response.content
 
 # stremlit UI
 st.markdown('# **News Article Generator App from YouTube Videos**')
@@ -79,15 +79,16 @@ if st.checkbox('Start Analysis...'):
     # write article to article.txt
     with open('article.txt', 'w') as article_file:
         article_file.write(article)
-    
+
     with ZipFile('output.zip', 'w') as zip_file:
         zip_file.write('transcript.txt')
         zip_file.write('article.text')
-    
+
     with open('output.zip', 'rb') as zip_download:
         btn = st.button(
             label='Download Zip',
             data=zip_download,
             file_name='output.zip',
             mime='application/zip'
+
         )
