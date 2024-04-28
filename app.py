@@ -1,3 +1,18 @@
+import streamlit as st
+from pytube import YouTube
+import whisper
+import os
+from pathlib import Path
+from zipfile import ZipFile
+import shutil
+from dotenv import find_dotenv, load_dotenv
+from langchain_groq import ChatGroq
+
+dotenv_path = '.env'
+load_dotenv(dotenv_path)
+GROQ_API = os.getenv('GROQ_API')
+
+
 @st.cache
 def load_whisper():
     model = whisper.load_model(name="base")
